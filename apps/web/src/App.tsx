@@ -35,8 +35,11 @@ export function App() {
   return (
     <>
       <header className="border-t-4 border-t-red-600 border-b bg-card/40">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-baseline gap-x-4 gap-y-1 px-4 py-4 sm:px-6">
-          <h1 className="text-xl font-bold tracking-tight">F1 Race Strategist</h1>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-1 px-4 py-4 sm:px-6">
+          <h1 className="flex items-center gap-2.5 text-xl font-bold tracking-tight">
+            <img src="/logo.svg" alt="" className="size-8" />
+            F1 Race Strategist
+          </h1>
           <p className="text-sm text-muted-foreground">
             Simula una carrera con tu estrategia de neumáticos y mira dónde se gana o se pierde el
             tiempo.
