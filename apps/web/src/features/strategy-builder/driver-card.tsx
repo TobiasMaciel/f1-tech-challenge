@@ -35,7 +35,7 @@ export function DriverCard({ driver }: DriverCardProps) {
               {label}
               {hint && <InfoHint term={`${label.toLowerCase()} del piloto`}>{hint}</InfoHint>}
             </dt>
-            <dd className="text-lg font-semibold tabular-nums">{value.toFixed(2)}</dd>
+            <dd className="text-lg font-semibold tabular-nums">{value}</dd>
           </div>
         ))}
       </dl>
