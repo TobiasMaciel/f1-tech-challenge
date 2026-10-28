@@ -144,6 +144,20 @@ describe('POST /api/simulations', () => {
     ]);
   });
 
+  it('responde los detalles de validación genéricos en español', async () => {
+    mockUpstream();
+
+    const response = await simulate({ ...validBody, stints: [{ compound: 'ULTRA', laps: 57 }] });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.details).toEqual([
+      {
+        path: 'stints.0.compound',
+        message: expect.stringMatching(/^Opción inválida: se esperaba una de "SOFT"/),
+      },
+    ]);
+  });
+
   it('responde 422 INVALID_STRATEGY cuando las vueltas no suman las de la carrera', async () => {
     mockUpstream();
 

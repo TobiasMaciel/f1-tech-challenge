@@ -1,6 +1,6 @@
 import type { TyreInfo } from '@f1/shared';
 import { describe, expect, it } from 'vitest';
-import { bahrain as bahrainInput, intermediate, soft, wet } from './fixtures.js';
+import { bahrain as bahrainInput, intermediate, soft, wet } from './test-fixtures.js';
 import { computeLapBreakdown, type LapContext } from './lap-time.js';
 
 function contextFor(baseLapTime: number, overrides: Partial<LapContext>): LapContext {

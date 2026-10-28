@@ -20,7 +20,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
       res.status(413).json({
         error: {
           code: 'PAYLOAD_TOO_LARGE',
-          message: 'El cuerpo de la petición es demasiado grande.',
+          message: 'El cuerpo de la solicitud es demasiado grande.',
         },
       });
       return;
@@ -28,7 +28,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     const message =
       err.type === 'entity.parse.failed'
         ? 'El cuerpo no es un JSON válido.'
-        : 'La petición no es válida.';
+        : 'La solicitud no es válida.';
     res.status(400).json({ error: { code: 'VALIDATION_ERROR', message } });
     return;
   }

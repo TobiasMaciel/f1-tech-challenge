@@ -206,6 +206,32 @@ describe('GET /api/races', () => {
     expect(response.status).toBe(200);
     expect(upstreamCalls).toBe(2);
   });
+
+  it('reintenta una vez si falla la red y luego responde bien', async () => {
+    let upstreamCalls = 0;
+    mockUpstream(() => {
+      upstreamCalls++;
+      return upstreamCalls === 1 ? HttpResponse.error() : HttpResponse.json(envelope(racesPayload));
+    });
+
+    const response = await request(buildApp()).get('/api/races');
+
+    expect(response.status).toBe(200);
+    expect(upstreamCalls).toBe(2);
+  });
+
+  it('no reintenta si la API de F1 responde 4xx', async () => {
+    let upstreamCalls = 0;
+    mockUpstream(() => {
+      upstreamCalls++;
+      return HttpResponse.json({}, { status: 400 });
+    });
+
+    const response = await request(buildApp()).get('/api/races');
+
+    expect(response.status).toBe(502);
+    expect(upstreamCalls).toBe(1);
+  });
 });
 
 describe('GET /api/races/:raceId', () => {

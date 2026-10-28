@@ -6,11 +6,10 @@ import type {
   StintResult,
 } from '@f1/shared';
 import { computeLapBreakdown } from './lap-time.js';
+import { sum } from './sum.js';
 import type { SimulationInput, Stint } from './types.js';
 
 const round3 = (value: number) => Math.round(value * 1000) / 1000;
-
-const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
 
 const lapTimeOf = (breakdown: LapBreakdown) => sum(Object.values(breakdown));
 
@@ -44,6 +43,7 @@ export function simulateRace(stints: Stint[], input: SimulationInput): Simulatio
     if (!tyre) throw new Error(`Missing tyre data for compound ${stint.compound}`);
 
     const startLap = laps.length + 1;
+    const endLap = startLap + stint.laps - 1;
     const stintBreakdowns: LapBreakdown[] = [];
 
     for (let tyreAge = 0; tyreAge < stint.laps; tyreAge++) {
@@ -68,7 +68,7 @@ export function simulateRace(stints: Stint[], input: SimulationInput): Simulatio
       number: index + 1,
       compound: stint.compound,
       startLap,
-      endLap: startLap + stint.laps - 1,
+      endLap,
       laps: stint.laps,
       time: round3(stintTime),
       averageLapTime: round3(stintTime / stint.laps),
@@ -80,7 +80,7 @@ export function simulateRace(stints: Stint[], input: SimulationInput): Simulatio
     if (nextStint) {
       totalTime += pitStopTime;
       pitStops.push({
-        afterLap: startLap + stint.laps - 1,
+        afterLap: endLap,
         fromCompound: stint.compound,
         toCompound: nextStint.compound,
         timeLost: round3(pitStopTime),

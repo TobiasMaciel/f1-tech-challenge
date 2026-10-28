@@ -81,6 +81,7 @@ export function createHttpF1Repository({
 
     const parsed = schema.safeParse(data);
     if (!parsed.success) {
+      logger.error({ path, issues: parsed.error.issues }, 'F1 API returned an invalid payload');
       throw new AppError(
         502,
         'UPSTREAM_ERROR',

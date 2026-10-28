@@ -9,7 +9,7 @@ import type {
   Weather,
 } from './schemas.js';
 
-/** Thrown by the repository when the upstream API answers 404; services turn it into RACE_NOT_FOUND and similar. */
+/** Thrown by the repository when the upstream API answers 404 for a single resource; the race services turn it into RACE_NOT_FOUND. */
 export class F1NotFoundError extends Error {
   constructor(readonly path: string) {
     super(`F1 API resource not found: ${path}`);

@@ -21,20 +21,23 @@ export const simulationRequestSchema = z.object({
 
 export type SimulationRequest = z.infer<typeof simulationRequestSchema>;
 
+/** Totals of one stint; times are in seconds. */
 export interface StintResult {
   number: number;
   compound: Compound;
   startLap: number;
   endLap: number;
   laps: number;
-  /** Seconds, laps only (pit stops are not included). */
+  /** Laps only; pit stops are not included. */
   time: number;
   averageLapTime: number;
-  /** Seconds lost to tyre wear and to rain over the stint. */
+  /** Lost to tyre wear over the stint. */
   degradationLoss: number;
+  /** Lost to rain over the stint. */
   weatherLoss: number;
 }
 
+/** A pit stop at the end of a stint. */
 export interface PitStopResult {
   afterLap: number;
   fromCompound: Compound;
@@ -53,17 +56,21 @@ export interface LapBreakdown {
   weather: number;
 }
 
+/** One simulated lap. */
 export interface LapResult {
   lap: number;
   stint: number;
   compound: Compound;
   /** Laps already completed on this set of tyres. */
   tyreAge: number;
+  /** From 0 (dry) to 1 (heavy rain). */
   rainIntensity: number;
+  /** Seconds. */
   time: number;
   breakdown: LapBreakdown;
 }
 
+/** Body of a successful `POST /api/simulations`. */
 export interface SimulationResponse {
   /** Seconds, including pit stops. */
   totalTime: number;

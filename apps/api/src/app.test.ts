@@ -42,6 +42,7 @@ describe('parámetros con codificación de porcentaje inválida', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
+      expect(response.body.error.message).toBe('La solicitud no es válida.');
     },
   );
 });

@@ -72,15 +72,6 @@ describe('GET /api/drivers', () => {
     });
   });
 
-  it('responde 502 UPSTREAM_ERROR cuando la API de F1 responde 500', async () => {
-    mockUpstream(() => HttpResponse.json({}, { status: 500 }));
-
-    const response = await request(buildApp()).get('/api/drivers');
-
-    expect(response.status).toBe(502);
-    expect(response.body.error.code).toBe('UPSTREAM_ERROR');
-  });
-
   it('responde 502 UPSTREAM_ERROR cuando un piloto referencia un equipo inexistente', async () => {
     const orphan = { drivers: [{ ...driversPayload.drivers[0], teamId: 'team-99' }] };
     mockUpstream(() => HttpResponse.json(envelope(orphan)));

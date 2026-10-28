@@ -1,4 +1,4 @@
-import { compoundSchema } from '@f1/shared';
+import { circuitTypeSchema, compoundSchema } from '@f1/shared';
 import { z } from 'zod';
 
 // Upstream payloads, as the F1 API returns them (already unwrapped from `data`).
@@ -7,7 +7,7 @@ export const circuitSchema = z.object({
   id: z.string(),
   name: z.string(),
   country: z.string(),
-  type: z.enum(['permanent', 'street', 'semi-street']),
+  type: circuitTypeSchema,
   laps: z.number(),
   lengthKm: z.number(),
   baseLapTime: z.number(),

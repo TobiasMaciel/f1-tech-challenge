@@ -1,3 +1,4 @@
+export { circuitTypeSchema, type CircuitType } from './circuit-type.js';
 export { compoundSchema, type Compound } from './compound.js';
 export { raceIdSchema } from './race-id.js';
 export { simulationRequestSchema } from './simulation.js';
@@ -7,7 +8,6 @@ export type { RaceSummary, RacesResponse } from './races.js';
 export type {
   ForecastSegment,
   RaceDetailCircuit,
-  RaceDetailRace,
   RaceDetailResponse,
   RaceDetailSimulationParameters,
   TyreInfo,

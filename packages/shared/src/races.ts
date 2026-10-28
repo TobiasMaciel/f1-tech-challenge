@@ -10,6 +10,7 @@ export interface RaceSummary {
   circuit: { id: string; name: string; country: string };
 }
 
+/** Body of `GET /api/races`. */
 export interface RacesResponse {
   races: RaceSummary[];
 }

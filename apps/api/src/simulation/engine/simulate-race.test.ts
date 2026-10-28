@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bahrain } from './fixtures.js';
+import { bahrain } from './test-fixtures.js';
 import { simulateRace } from './simulate-race.js';
 import type { SimulationInput, Stint } from './types.js';
 

@@ -1,3 +1,4 @@
+import type { CircuitType } from './circuit-type.js';
 import type { Compound } from './compound.js';
 
 export interface RaceDetailRace {
@@ -16,10 +17,11 @@ export interface RaceDetailCircuit {
   id: string;
   name: string;
   country: string;
-  type: 'permanent' | 'street' | 'semi-street';
+  type: CircuitType;
   lengthKm: number;
   /** Seconds. */
   baseLapTime: number;
+  /** Multiplier of tyre degradation on this circuit; above 1 wears tyres faster. */
   tyreWear: number;
   /** From 0 (easy) to 1 (very hard). */
   overtakingDifficulty: number;
@@ -35,12 +37,14 @@ export interface ForecastSegment {
   rainIntensity: number;
 }
 
+/** Race parameters that feed the simulation; times are in seconds. */
 export interface RaceDetailSimulationParameters {
-  /** Seconds, plus or minus, per lap. */
+  /** Plus or minus, per lap. */
   lapTimeVariance: number;
-  /** Seconds. */
+  /** Time lost driving through the pit lane, without the tyre change. */
   pitStopLoss: number;
   tyreChangeTime: number;
+  /** Time gained per lap as the fuel burns off. */
   fuelEffectPerLap: number;
   /** Probability from 0 to 1. */
   safetyCarProbability: number;
@@ -53,10 +57,13 @@ export interface TyreInfo {
   pace: number;
   /** Seconds lost per lap of tyre age. */
   degradation: number;
+  /** From 0 to 1: how much of the rain penalty outside its optimal band the tyre avoids. */
   wetPerformance: number;
+  /** Rain intensity range, from 0 to 1, where the tyre has no rain penalty. */
   optimalRainIntensity: { min: number; max: number };
 }
 
+/** Everything the strategy screen shows about a race (`GET /api/races/:raceId`). */
 export interface RaceDetailResponse {
   race: RaceDetailRace;
   circuit: RaceDetailCircuit;
