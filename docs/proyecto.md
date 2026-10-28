@@ -114,6 +114,10 @@ Para que una estrategia sea válida, las vueltas de los stints tienen que sumar 
 
 Cada decisión importante tiene su explicación corta en [`adr/`](adr/README.md): por qué un solo repositorio, React con Vite, Express separado en capas, la API intermedia, cómo se valida, el caché, por qué no hay base de datos, la simulación sin azar y qué se prueba.
 
+## Cómo se trabajó
+
+Primero una especificación con historias de usuario, después trece tickets implementados uno por uno y al final una revisión completa. El detalle está en [`proceso.md`](proceso.md).
+
 ## Qué mejoraría con más tiempo
 
 - **Sugerir la mejor estrategia:** es la pregunta que el usuario intenta responder a mano.

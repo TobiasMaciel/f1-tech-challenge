@@ -34,4 +34,4 @@ Sugerir la mejor estrategia, ver la carrera animada, tests en un navegador real,
 
 ---
 
-Más detalle en [`docs/proyecto.md`](docs/proyecto.md): cómo está organizado, comandos, cómo probar la API y las fórmulas.
+Más detalle en [`docs/proyecto.md`](docs/proyecto.md): cómo está organizado, comandos, cómo probar la API y las fórmulas. Cómo se trabajó, con la especificación y los tickets, en [`docs/proceso.md`](docs/proceso.md).
