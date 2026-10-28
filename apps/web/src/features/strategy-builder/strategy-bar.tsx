@@ -46,7 +46,13 @@ export function StrategyBar({ rows, totalLaps, warnings }: StrategyBarProps) {
                 title={`${label}: ${stint.laps} vueltas`}
                 className="flex min-w-0 items-center justify-center text-sm font-bold text-black"
               >
-                {letter}
+                {/* Solid backing in the compound colour keeps the letter readable over the hatching. */}
+                <span
+                  style={{ backgroundColor: color }}
+                  className="relative z-10 rounded-sm px-1.5 leading-5"
+                >
+                  {letter}
+                </span>
               </li>
             );
           })}

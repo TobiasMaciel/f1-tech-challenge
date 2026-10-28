@@ -1,5 +1,6 @@
 import type { RaceDetailSimulationParameters } from '@f1/shared';
 import { TriangleAlert } from 'lucide-react';
+import { InfoHint } from '@/components/info-hint';
 import { formatPercent } from '@/lib/format';
 
 type RisksLineProps = Pick<
@@ -22,6 +23,9 @@ export function RisksLine({ safetyCarProbability, lapTimeVariance }: RisksLinePr
           <span className="font-medium tabular-nums">±{lapTimeVariance.toFixed(2)} s</span>
         </span>
       </p>
+      <InfoHint term="el safety car y la variabilidad">
+        Solo informativo: la simulación no incluye safety car ni variaciones al azar entre vueltas.
+      </InfoHint>
     </div>
   );
 }

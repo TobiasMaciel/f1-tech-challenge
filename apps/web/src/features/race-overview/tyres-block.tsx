@@ -22,9 +22,18 @@ export function TyresBlock({ tyres }: { tyres: TyreInfo[] }) {
         <table className="w-full text-sm whitespace-nowrap tabular-nums">
           <thead className="text-xs text-muted-foreground">
             <tr>
-              <th className="pb-2 text-left font-normal">Compuesto</th>
-              <ColumnHeader label="Ritmo" term="el ritmo del compuesto">
-                Segundos por vuelta que suma o resta el compuesto; negativo es más rápido.
+              <th className="pb-2 text-left font-normal">
+                <span className="inline-flex items-center gap-1">
+                  Compuesto
+                  <InfoHint term="el compuesto">
+                    El tipo de neumático: blando, medio y duro para seco; intermedio y lluvia
+                    extrema para pista mojada.
+                  </InfoHint>
+                </span>
+              </th>
+              <ColumnHeader label="Diferencia por vuelta" term="la diferencia por vuelta">
+                Segundos por vuelta que suma o resta el compuesto frente a la vuelta base; negativo
+                es más rápido.
               </ColumnHeader>
               <ColumnHeader label="Degradación" term="la degradación">
                 Segundos que pierde el compuesto por cada vuelta de uso, multiplicados por el

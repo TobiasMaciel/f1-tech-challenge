@@ -25,6 +25,20 @@ export const TERM_LABELS: Record<TimeTermKey, string> = {
   pitStops: 'Paradas',
 };
 
+/** One-line plain Spanish explanation of each term, saying whether the strategy changes it. */
+export const TERM_HINTS: Record<TimeTermKey, string> = {
+  package:
+    'Lo que el piloto y su auto pierden frente a la vuelta base. No depende de la estrategia: cambia si eliges otro piloto.',
+  tyrePace:
+    'El ritmo propio de cada neumático: los blandos son más rápidos y los de lluvia, más lentos.',
+  degradation:
+    'El neumático pierde un poco más de tiempo con cada vuelta de uso; parar en boxes lo vuelve a cero.',
+  fuel: 'El auto se aliviana al gastar combustible, así que cada vuelta es un poco más rápida. Es igual con cualquier estrategia.',
+  weather:
+    'Tiempo perdido por usar un neumático que no es el adecuado para la lluvia de esa vuelta.',
+  pitStops: 'Tiempo de entrar y salir de boxes más el cambio de neumáticos, por cada parada.',
+};
+
 /** Adds up, over the whole race, the terms the API already returns for every lap and pit stop. */
 export function summarizeTime({ laps, pitStops }: SimulationResponse): TimeSummary {
   const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);

@@ -1,7 +1,7 @@
 import { CompoundBadge } from '@/components/compound-badge';
 import { useDrivers } from '@/hooks/use-drivers';
 import type { SimulationRun } from '@/hooks/use-simulation';
-import { formatSignedSeconds } from '@/lib/format';
+import { formatSignedDelta } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 interface PreviousComparisonProps {
@@ -35,7 +35,7 @@ export function PreviousComparison({
       >
         {totalDelta === 0
           ? 'Mismo tiempo que la anterior'
-          : `${formatSignedSeconds(totalDelta, 3)} frente a la anterior`}
+          : `${formatSignedDelta(totalDelta)} frente a la anterior`}
       </p>
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground tabular-nums">
         <span>Anterior:</span>

@@ -32,7 +32,7 @@ interface StrategyBuilderProps {
   onRetrySimulation: () => void;
 }
 
-const UPSTREAM_ERROR_CODES = ['UPSTREAM_ERROR', 'UPSTREAM_TIMEOUT'];
+const RETRYABLE_ERROR_CODES = ['UPSTREAM_ERROR', 'UPSTREAM_TIMEOUT', 'NETWORK_ERROR'];
 
 const INITIAL_ROWS: StintRow[] = [
   { id: 1, compound: 'SOFT', laps: undefined },
@@ -90,9 +90,9 @@ export function StrategyBuilder({
   const rainWarnings = raceDetail
     ? getRainBandWarnings(rows, raceDetail.weather.forecast, raceDetail.tyres, raceDetail.race.laps)
     : [];
-  // Rejections of the strategy (400/422) show next to the form; upstream failures can be retried.
-  const isUpstreamError =
-    simulationError !== null && UPSTREAM_ERROR_CODES.includes(simulationError.code);
+  // Rejections of the strategy (400/422) show next to the form; upstream and network failures can be retried.
+  const isRetryableError =
+    simulationError !== null && RETRYABLE_ERROR_CODES.includes(simulationError.code);
   const canSubmit = parsed.success && raceDetail !== undefined && blockers.length === 0;
 
   return (
@@ -131,7 +131,13 @@ export function StrategyBuilder({
 
         {raceDetail && (
           <div className="space-y-6 rounded-lg border bg-card p-4">
-            <h3 className="font-semibold">Stints</h3>
+            <h3 className="flex items-center gap-1.5 font-semibold">
+              Stints
+              <InfoHint term="los stints">
+                Un stint es el tramo de vueltas que corres con un mismo juego de neumáticos. Entre
+                un stint y el siguiente hay una parada en boxes.
+              </InfoHint>
+            </h3>
             <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-3 gap-y-1 text-xs text-muted-foreground">
               <span className="flex items-center gap-1 self-center">
                 Clima
@@ -152,7 +158,7 @@ export function StrategyBuilder({
               assignedLaps={assignedLaps}
               hasInvalidStint={hasInvalidStint}
               rowErrors={rowErrors}
-              submitError={isUpstreamError ? undefined : simulationError?.message}
+              submitError={isRetryableError ? undefined : simulationError?.message}
               canSubmit={canSubmit}
               blockers={blockers}
               isSubmitting={isSimulating}
@@ -163,7 +169,7 @@ export function StrategyBuilder({
               onRemoveRow={(id) => updateRows(rows.filter((row) => row.id !== id))}
               onSubmit={() => parsed.success && onSimulate(parsed.data)}
             />
-            {isUpstreamError && (
+            {isRetryableError && (
               <ErrorAlert message={simulationError.message} onRetry={onRetrySimulation} />
             )}
           </div>

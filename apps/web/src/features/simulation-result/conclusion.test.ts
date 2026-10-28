@@ -56,7 +56,9 @@ describe('buildConclusion', () => {
       stints: [stint(1, 'SOFT', 0)],
     });
 
-    expect(buildConclusion(result)).toBe('La mayor pérdida vino del desgaste: +45.2 s.');
+    expect(buildConclusion(result)).toBe(
+      'La decisión de estrategia que más tiempo costó fue el desgaste: +45.2 s.',
+    );
   });
 
   it('no culpa al piloto, al auto ni al combustible, que la estrategia no decide', () => {
@@ -65,7 +67,9 @@ describe('buildConclusion', () => {
       stints: [stint(1, 'SOFT', 0)],
     });
 
-    expect(buildConclusion(result)).toBe('La mayor pérdida vino del desgaste: +2.0 s.');
+    expect(buildConclusion(result)).toBe(
+      'La decisión de estrategia que más tiempo costó fue el desgaste: +2.0 s.',
+    );
   });
 
   it('dice que no hubo pérdidas cuando ninguna decisión de la estrategia pierde tiempo', () => {
@@ -86,7 +90,7 @@ describe('buildConclusion', () => {
     });
 
     expect(buildConclusion(result)).toBe(
-      'La mayor pérdida vino del desgaste: +4.0 s. Elegiste neumáticos adecuados para la lluvia en toda la carrera.',
+      'La decisión de estrategia que más tiempo costó fue el desgaste: +4.0 s. Elegiste neumáticos adecuados para la lluvia en toda la carrera.',
     );
   });
 
@@ -97,7 +101,7 @@ describe('buildConclusion', () => {
     });
 
     expect(buildConclusion(result)).toBe(
-      'La mayor pérdida vino de la lluvia: +9.0 s, sobre todo en el stint 2 (Duro), con un compuesto fuera de su banda.',
+      'La decisión de estrategia que más tiempo costó fue la lluvia: +9.0 s, sobre todo en el stint 2 (Duro), con un compuesto fuera de su banda.',
     );
   });
 
@@ -108,7 +112,7 @@ describe('buildConclusion', () => {
     });
 
     expect(buildConclusion(result)).toBe(
-      'La mayor pérdida vino del desgaste: +20.0 s. Los neumáticos perdieron más tiempo con la lluvia en el stint 2 (Duro): +7.0 s.',
+      'La decisión de estrategia que más tiempo costó fue el desgaste: +20.0 s. Los neumáticos perdieron más tiempo con la lluvia en el stint 2 (Duro): +7.0 s.',
     );
   });
 
@@ -118,7 +122,9 @@ describe('buildConclusion', () => {
       stints: [stint(1, 'SOFT', 0)],
     });
 
-    expect(buildConclusion(result)).toBe('La mayor pérdida vino del desgaste: +2.0 s.');
+    expect(buildConclusion(result)).toBe(
+      'La decisión de estrategia que más tiempo costó fue el desgaste: +2.0 s.',
+    );
   });
 
   it('avisa cuando se usaron neumáticos de lluvia en seco', () => {
@@ -128,7 +134,7 @@ describe('buildConclusion', () => {
     });
 
     expect(buildConclusion(result)).toBe(
-      'La mayor pérdida vino del compuesto: +3.2 s. Usaste neumáticos de lluvia en seco: cuestan su ritmo más lento en cada vuelta.',
+      'La decisión de estrategia que más tiempo costó fue el compuesto: +3.2 s. Usaste neumáticos de lluvia en seco: cuestan su ritmo más lento en cada vuelta.',
     );
   });
 

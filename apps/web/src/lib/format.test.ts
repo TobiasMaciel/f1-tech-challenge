@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuration, formatRaceTime, formatSignedSeconds, getSecondTicks } from './format';
+import {
+  formatDuration,
+  formatRaceTime,
+  formatSignedDelta,
+  formatSignedSeconds,
+  getSecondTicks,
+} from './format';
 
 describe('formatSignedSeconds', () => {
   it('muestra el signo y un decimal por defecto', () => {
@@ -14,6 +20,18 @@ describe('formatSignedSeconds', () => {
   it('no muestra signo cuando el valor redondeado es cero', () => {
     expect(formatSignedSeconds(0.04)).toBe('0.0 s');
     expect(formatSignedSeconds(-0.04)).toBe('0.0 s');
+  });
+});
+
+describe('formatSignedDelta', () => {
+  it('por debajo de un minuto muestra segundos con tres decimales', () => {
+    expect(formatSignedDelta(-32.4)).toBe('-32.400 s');
+    expect(formatSignedDelta(59.9994)).toBe('+59.999 s');
+  });
+
+  it('desde un minuto muestra minutos y segundos con signo', () => {
+    expect(formatSignedDelta(984.952)).toBe('+16:24.952');
+    expect(formatSignedDelta(-60)).toBe('-1:00.000');
   });
 });
 

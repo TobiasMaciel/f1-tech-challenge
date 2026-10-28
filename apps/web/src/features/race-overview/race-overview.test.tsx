@@ -1,5 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { App } from '@/App';
@@ -24,7 +24,9 @@ describe('información de la carrera', () => {
     expect(circuit).toHaveTextContent('22 s + 2.5 s de cambio');
 
     const weather = screen.getByRole('region', { name: 'Clima' });
-    expect(weather).toHaveTextContent('Very hot and completely dry.');
+    expect(weather).toHaveTextContent(
+      'Seco hasta la vuelta 19 y lluvia moderada de la 20 a la 57.',
+    );
     expect(within(weather).getAllByRole('listitem')).toHaveLength(2);
 
     const tyres = screen.getByRole('region', { name: 'Neumáticos' });
@@ -50,5 +52,20 @@ describe('información de la carrera', () => {
     await userEvent.hover(await screen.findByRole('button', { name: 'Ayuda sobre vuelta base' }));
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent(/Tiempo de vuelta de referencia/);
+  });
+
+  it('la ayuda se abre al tocarla, sin pasar el mouse, y se cierra con Escape', async () => {
+    render(
+      <QueryClientProvider client={createQueryClient()}>
+        <App />
+      </QueryClientProvider>,
+    );
+    await userEvent.click(await screen.findByRole('button', { name: /Bahrain Grand Prix/ }));
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Ayuda sobre vuelta base' }));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(/Tiempo de vuelta de referencia/);
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument());
   });
 });

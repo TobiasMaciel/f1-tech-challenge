@@ -125,7 +125,7 @@ describe('simular una estrategia', () => {
 
     expect(
       await screen.findByText(
-        'La mayor pérdida vino de las paradas: +24.5 s. Los neumáticos perdieron más tiempo con la lluvia en el stint 2 (Duro): +3.2 s.',
+        'La decisión de estrategia que más tiempo costó fueron las paradas: +24.5 s. Los neumáticos perdieron más tiempo con la lluvia en el stint 2 (Duro): +3.2 s.',
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Resultado de la simulación' })).toHaveFocus();
@@ -280,6 +280,17 @@ describe('simular una estrategia', () => {
 
     expect(await screen.findAllByText('1:27:50.058')).not.toHaveLength(0);
     expect(screen.queryByText('No se pudo obtener los datos.')).not.toBeInTheDocument();
+  });
+
+  it('ofrece reintentar cuando no hay conexión con el servidor', async () => {
+    server.use(http.post('*/api/simulations', () => HttpResponse.error()));
+    await openStrategyBuilder();
+
+    await fillLaps('20', '37');
+    await userEvent.click(screen.getByRole('button', { name: 'Simular' }));
+
+    expect(await screen.findByText('No se pudo conectar con el servidor.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument();
   });
 });
 

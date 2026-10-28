@@ -10,14 +10,21 @@ export function DriverCard({ driver }: DriverCardProps) {
   const stats = [
     {
       label: 'Ritmo',
+      term: 'el ritmo del piloto',
       value: driver.pace,
       hint: 'Velocidad del piloto de 0 a 1; junto con el auto fija cuánto se acerca a la vuelta base.',
     },
-    { label: 'Rendimiento del auto', value: driver.team.carPerformance },
+    {
+      label: 'Rendimiento del auto',
+      term: 'el rendimiento del auto',
+      value: driver.team.carPerformance,
+      hint: 'Calidad del auto, de 0 a 1. Junto con el ritmo del piloto define cuánto se acerca a la vuelta base.',
+    },
     {
       label: 'Consistencia',
+      term: 'la consistencia del piloto',
       value: driver.consistency,
-      hint: 'Regularidad del piloto de 0 a 1. Solo informativa: no entra en la simulación.',
+      hint: 'Regularidad del piloto de 0 a 1. Solo informativa: la simulación no usa azar.',
     },
   ];
 
@@ -30,11 +37,11 @@ export function DriverCard({ driver }: DriverCardProps) {
         {driver.name} <span className="text-muted-foreground">#{driver.number}</span>
       </h3>
       <dl className="mt-3 grid grid-cols-3 gap-3">
-        {stats.map(({ label, value, hint }) => (
+        {stats.map(({ label, term, value, hint }) => (
           <div key={label}>
             <dt className="flex items-center gap-1 text-xs leading-tight text-muted-foreground">
               {label}
-              {hint && <InfoHint term={`${label.toLowerCase()} del piloto`}>{hint}</InfoHint>}
+              <InfoHint term={term}>{hint}</InfoHint>
             </dt>
             <dd className="text-lg font-semibold tabular-nums">{value}</dd>
           </div>

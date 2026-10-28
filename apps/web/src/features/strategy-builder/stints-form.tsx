@@ -93,6 +93,7 @@ export function StintsForm({
               <input
                 type="text"
                 inputMode="numeric"
+                maxLength={3}
                 autoComplete="off"
                 aria-label={`Vueltas del stint ${index + 1}`}
                 aria-invalid={rowErrors[index] !== undefined}

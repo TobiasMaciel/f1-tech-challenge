@@ -2,7 +2,7 @@ import type { SimulationResponse } from '@f1/shared';
 import { InfoHint } from '@/components/info-hint';
 import { formatDuration, formatRaceTime, formatSignedSeconds } from '@/lib/format';
 import { cn } from '@/lib/utils';
-import { summarizeTime, type TimeTermKey } from './time-summary';
+import { summarizeTime, TERM_HINTS, type TimeTermKey } from './time-summary';
 
 interface TimeBreakdownProps {
   result: SimulationResponse;
@@ -40,11 +40,14 @@ export function TimeBreakdown({ result, deltas }: TimeBreakdownProps) {
             <li
               key={term.key}
               className={cn(
-                'grid grid-cols-[6.5rem_minmax(0,1fr)_4.5rem] items-center gap-3 text-sm',
-                deltas && 'grid-cols-[6.5rem_minmax(0,1fr)_4.5rem_4.5rem]',
+                'grid grid-cols-[8rem_minmax(0,1fr)_4.5rem] items-center gap-3 text-sm',
+                deltas && 'grid-cols-[8rem_minmax(0,1fr)_4.5rem_4.5rem]',
               )}
             >
-              <span>{term.label}</span>
+              <span className="flex items-center gap-1">
+                {term.label}
+                <InfoHint term={term.label.toLowerCase()}>{TERM_HINTS[term.key]}</InfoHint>
+              </span>
               <span className="h-2 rounded-full bg-muted">
                 <span
                   className={`block h-full origin-left rounded-full motion-safe:animate-[grow-x_500ms_ease-out] ${term.seconds > 0 ? 'bg-red-500' : 'bg-emerald-500'}`}

@@ -28,8 +28,8 @@ export function StintsTable({ stints }: StintsTableProps) {
             <tr>
               <th className="py-2 pr-3 text-left font-normal">Stint</th>
               <th className="px-3 py-2 text-left font-normal">Compuesto</th>
+              <th className={NUMBER_HEADER}>Tramo</th>
               <th className={NUMBER_HEADER}>Vueltas</th>
-              <th className={NUMBER_HEADER}>Cantidad</th>
               <th className={NUMBER_HEADER}>Tiempo</th>
               <th className={NUMBER_HEADER}>Vuelta promedio</th>
               <th className={NUMBER_HEADER}>Pérdida por degradación</th>

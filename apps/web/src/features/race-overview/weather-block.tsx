@@ -1,7 +1,7 @@
 import type { RaceDetailResponse } from '@f1/shared';
 import { InfoHint } from '@/components/info-hint';
 import { FORECAST_SEGMENTS_HINT, WeatherBar } from '@/components/weather-bar';
-import { describeRain, getRainLevel } from '@/lib/rain';
+import { describeForecast, describeRain, getRainLevel } from '@/lib/rain';
 import { cn } from '@/lib/utils';
 
 interface WeatherBlockProps {
@@ -18,7 +18,7 @@ export function WeatherBlock({ weather, totalLaps }: WeatherBlockProps) {
           Clima
           <InfoHint term="los tramos del clima">{FORECAST_SEGMENTS_HINT}</InfoHint>
         </h3>
-        <p className="text-sm text-muted-foreground">{weather.summary}</p>
+        <p className="text-sm text-muted-foreground">{describeForecast(weather.forecast)}</p>
       </div>
       <WeatherBar forecast={weather.forecast} totalLaps={totalLaps} />
       <table className="w-full text-sm tabular-nums">
@@ -26,7 +26,14 @@ export function WeatherBlock({ weather, totalLaps }: WeatherBlockProps) {
         <thead className="text-left text-xs text-muted-foreground">
           <tr>
             <th className="pb-2 font-normal">Vueltas</th>
-            <th className="pb-2 font-normal">Intensidad de lluvia (0–1)</th>
+            <th className="pb-2 font-normal">
+              <span className="inline-flex items-center gap-1">
+                Intensidad de lluvia (0–1)
+                <InfoHint term="la intensidad de lluvia">
+                  0 es pista seca y 1 es la lluvia más fuerte.
+                </InfoHint>
+              </span>
+            </th>
             <th className="pb-2 text-right font-normal">Temperatura</th>
           </tr>
         </thead>

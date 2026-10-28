@@ -26,6 +26,13 @@ export function formatDuration(seconds: number): string {
   return formatClock(seconds, false);
 }
 
+/** A time difference to the millisecond: "-32.400 s" under a minute, "+16:24.952" from one minute up. */
+export function formatSignedDelta(seconds: number): string {
+  const rounded = Number(seconds.toFixed(3));
+  if (Math.abs(rounded) < 60) return formatSignedSeconds(rounded, 3);
+  return `${rounded > 0 ? '+' : '-'}${formatDuration(Math.abs(rounded))}`;
+}
+
 /** Always with hours, as race totals read: 5270.058 -> "1:27:50.058". */
 export function formatRaceTime(seconds: number): string {
   return formatClock(seconds, true);

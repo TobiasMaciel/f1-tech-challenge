@@ -5,14 +5,14 @@ import { isRaining } from '@/lib/rain';
 import { summarizeTime, type TimeTermKey } from './time-summary';
 
 /**
- * The terms the strategy decides, each with its article so it reads naturally after "vino".
+ * The terms the strategy decides, each with the verb and article that follow "costó".
  * Driver, car and fuel are left out: the strategy cannot change them.
  */
 const LOSS_SOURCES: Partial<Record<TimeTermKey, string>> = {
-  tyrePace: 'del compuesto',
-  degradation: 'del desgaste',
-  weather: 'de la lluvia',
-  pitStops: 'de las paradas',
+  tyrePace: 'fue el compuesto',
+  degradation: 'fue el desgaste',
+  weather: 'fue la lluvia',
+  pitStops: 'fueron las paradas',
 };
 
 const RAIN_COMPOUNDS: Compound[] = ['INTERMEDIATE', 'WET'];
@@ -28,7 +28,7 @@ export function buildConclusion(result: SimulationResponse): string {
     return 'Ninguna decisión de la estrategia perdió tiempo frente a la referencia.';
   }
 
-  let text = `La mayor pérdida vino ${LOSS_SOURCES[biggest.key]}: ${formatSignedSeconds(biggest.seconds)}`;
+  let text = `La decisión de estrategia que más tiempo costó ${LOSS_SOURCES[biggest.key]}: ${formatSignedSeconds(biggest.seconds)}`;
   if (result.laps.some((lap) => isRaining(lap.rainIntensity))) {
     const worst = result.stints.reduce((max, stint) =>
       stint.weatherLoss > max.weatherLoss ? stint : max,
