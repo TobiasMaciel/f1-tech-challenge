@@ -1,16 +1,15 @@
-# 0001. Monorepo TypeScript con npm workspaces
+# 0001. Un solo repositorio para web, API y código compartido
 
 ## Contexto
 
-Frontend y backend comparten el contrato de la API (request, response y reglas de validación). Mantenerlos en repositorios o paquetes sin relación obliga a duplicar tipos y deja que se desincronicen.
+La web y la API se tienen que poner de acuerdo en qué se manda y qué se responde. Si cada una vive en su propio proyecto, ese acuerdo se escribe dos veces y tarde o temprano deja de coincidir.
 
 ## Decisión
 
-Un solo repositorio con npm workspaces: `apps/web`, `apps/api` y `packages/shared`. Todo en TypeScript, Node 24. Un único `npm install` y scripts raíz (`dev`, `test`, `lint`, `typecheck`, `build`) que recorren los workspaces.
+Un solo repositorio con tres partes: `apps/web`, `apps/api` y `packages/shared`, donde está lo que usan las dos. Todo en TypeScript y Node 24, usando los workspaces de npm. Un `npm install` instala todo y los scripts de la raíz (`dev`, `test`, `lint`, `typecheck`, `build`) corren en las tres partes.
 
 ## Consecuencias
 
-- (+) El contrato se define una vez y los dos lados lo importan; un cambio incompatible rompe el `typecheck`.
-- (+) Un solo comando para instalar, correr y verificar.
-- (−) `packages/shared` se consume desde su código fuente, por lo que ambas apps deben poder compilar TypeScript.
-- (−) Sin herramientas de monorepo (Turborepo, Nx) no hay caché de tareas; con este tamaño no hace falta.
+- Si la API cambia lo que responde y la web no se actualiza, `npm run typecheck` falla: el error aparece antes de llegar al navegador.
+- Se instala, se corre y se prueba con un solo comando.
+- Para un proyecto de este tamaño no hacen falta herramientas extra de monorepos como Turborepo o Nx.

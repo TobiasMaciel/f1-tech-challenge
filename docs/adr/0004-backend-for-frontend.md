@@ -1,15 +1,15 @@
-# 0004. Backend for Frontend
+# 0004. La web solo habla con nuestra API
 
 ## Contexto
 
-Cada pantalla necesita datos de varios endpoints de la API F1 (carrera, circuito, clima, parámetros, neumáticos, pilotos, equipos), con identificadores cruzados y un formato `{statusCode, code, message, data}`.
+Para mostrar una carrera hacen falta datos de varios endpoints de la API de F1: la carrera, el clima, los parámetros y los neumáticos. Además vienen conectados por ids (la carrera dice qué circuito usa, el piloto a qué equipo pertenece) y dentro de un envoltorio `{statusCode, code, message, data}`.
 
 ## Decisión
 
-El frontend solo habla con nuestra API. Cada endpoint devuelve lo que una pantalla necesita ya combinado (por ejemplo `GET /api/races/:raceId` junta carrera, circuito, clima, parámetros y neumáticos). Contrato en `docs/api.md`.
+La web nunca llama a la API de F1. Nuestra API pide lo necesario, lo junta y devuelve a cada pantalla exactamente lo que muestra. Por ejemplo, `GET /api/races/:raceId` devuelve en una sola respuesta la carrera con su circuito, el clima, los parámetros y los neumáticos. El contrato está en `docs/api.md`.
 
 ## Consecuencias
 
-- (+) El frontend no conoce la API externa ni sus errores; hay un único formato de error propio.
-- (+) La integración, el caché y la validación quedan en un solo lugar.
-- (−) Hay una capa más que mantener cuando la API externa cambia.
+- La web no sabe nada de la API externa: sus errores llegan siempre con nuestro formato y en español.
+- Si la API de F1 cambia, se ajusta un solo lugar.
+- Es una pieza más para mantener.

@@ -6,7 +6,7 @@ bundled: false
 docs: |-
   Requests para probar la API del proyecto y la API F1 original que consume.
 
-  Elegí el entorno **local** y levantá la app con `npm run dev`. Si cambiaste `PORT` en `.env`, actualizá `baseUrl` en el entorno.
+  Elige el entorno **local** y levanta la app con `npm run dev`. Si cambias `PORT` en `.env`, actualiza `baseUrl` en el entorno.
 
   La API original puede tardar hasta un minuto en responder la primera vez (cold start).
 extensions:

@@ -1,16 +1,17 @@
-# 0003. Express 5 con módulos, capas y patrón repository
+# 0003. API con Express separada en capas
 
 ## Contexto
 
-El backend integra una API externa, valida entradas y ejecuta un motor de cálculo. Mezclar estas responsabilidades en los handlers dificulta probar cada una.
+La API hace tres cosas distintas: pide datos a la API de F1, revisa lo que le mandan y calcula la simulación. Si todo eso queda mezclado en un mismo archivo, cuesta probar cada parte por separado.
 
 ## Decisión
 
-Express 5 organizado en módulos (`races`, `drivers`, `simulation`), cada uno con rutas, controlador y servicio. El acceso a la API F1 está detrás de la interfaz `F1Repository`, con una implementación HTTP. El motor de simulación son funciones puras sin dependencias de Express ni de red. El servicio orquesta; el motor decide.
+Express 5, con una carpeta por tema (`races`, `drivers`, `simulation`). Dentro de cada una, la ruta recibe el pedido, el controlador lo lee y el servicio hace el trabajo.
+
+La conexión con la API de F1 está escondida detrás de una interfaz, `F1Repository`: los servicios piden "las carreras" sin saber de dónde salen. El cálculo de la simulación son funciones que solo reciben datos y devuelven un resultado, sin red ni Express. El servicio junta los datos; el motor hace la cuenta.
 
 ## Consecuencias
 
-- (+) El motor se prueba sin servidor ni mocks.
-- (+) El repository se puede sustituir (otro origen de datos, tests) sin tocar los servicios.
-- (+) Express 5 propaga los errores de handlers async al manejador de errores sin envoltorios.
-- (−) Más archivos que un único `app.ts`; se acepta a cambio de límites claros entre capas.
+- El cálculo se prueba directo, con números, sin levantar un servidor.
+- En los tests, la API de F1 se reemplaza por datos falsos sin tocar los servicios.
+- Hay más archivos que si todo estuviera en uno, pero cada uno tiene un trabajo claro.

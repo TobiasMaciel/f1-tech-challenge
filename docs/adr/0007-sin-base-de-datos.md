@@ -2,15 +2,14 @@
 
 ## Contexto
 
-Todos los datos (carreras, circuitos, pilotos, neumáticos) vienen de la API F1. El challenge no pide guardar estrategias ni usuarios, y simular no crea ningún recurso.
+Todos los datos (carreras, circuitos, pilotos, neumáticos) vienen de la API de F1. El challenge no pide usuarios ni guardar estrategias, y simular no crea nada: solo calcula.
 
 ## Decisión
 
-El backend no tiene base de datos ni estado propio, salvo el caché en memoria del ADR 0006. `POST /api/simulations` calcula y responde `200`.
+La API no tiene base de datos. Lo único que guarda es el caché en memoria del ADR 0006. `POST /api/simulations` calcula y responde `200`.
 
 ## Consecuencias
 
-- (+) Menos piezas para correr el proyecto: `npm install` y `npm run dev`.
-- (+) El servicio es sin estado y fácil de desplegar.
-- (−) Las estrategias no se guardan ni se pueden comparar entre sesiones.
-- (−) Persistirlas requeriría una base relacional y un modelo de usuarios; queda como mejora.
+- Para correr el proyecto alcanza con `npm install` y `npm run dev`.
+- Las estrategias no se guardan: al recargar la página se pierden. La comparación con la simulación anterior vive solo mientras la página está abierta.
+- Guardarlas pediría una base relacional y usuarios; queda como mejora.

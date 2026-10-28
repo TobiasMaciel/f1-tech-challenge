@@ -5,7 +5,7 @@ Backend for Frontend: cada endpoint devuelve lo que necesita una pantalla, combi
 - Las respuestas exitosas devuelven el recurso sin envoltorio.
 - Los tiempos se expresan en segundos (`number`, redondeados a 3 decimales); el formato visual lo decide el frontend.
 
-Para probarlos, abrí la carpeta [`bruno/`](../bruno/) en Bruno y elegí el entorno `local`. También corre desde la terminal: `cd bruno && npx @usebruno/cli run --env local -r`.
+Para probarlos, abre la carpeta [`bruno/`](../bruno/) en Bruno y elige el entorno `local`. También corre desde la terminal: `cd bruno && npx @usebruno/cli run --env local -r`.
 
 ## Endpoints
 
@@ -144,12 +144,18 @@ Todos los errores comparten el mismo formato:
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "La solicitud no es válida.",
-    "details": [{ "path": "stints.0.laps", "message": "Debe ser un número entero positivo." }]
+    "details": [
+      { "path": "stints.0.laps", "message": "Debe ser un número entero." },
+      {
+        "path": "stints.1.compound",
+        "message": "Opción inválida: se esperaba una de \"SOFT\"|\"MEDIUM\"|\"HARD\"|\"INTERMEDIATE\"|\"WET\""
+      }
+    ]
   }
 }
 ```
 
-`details` solo está presente en `VALIDATION_ERROR` y `INVALID_STRATEGY`. En `INVALID_STRATEGY` lista cada regla incumplida (`path: "stints"`) y `message` repite la primera.
+`details` puede aparecer en `VALIDATION_ERROR` y `INVALID_STRATEGY`; un JSON mal formado responde `VALIDATION_ERROR` sin `details`. En `INVALID_STRATEGY` lista cada regla incumplida (`path: "stints"`) y `message` repite la primera.
 
 | HTTP | `code` | Cuándo |
 |---|---|---|

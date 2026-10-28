@@ -1,20 +1,19 @@
-# 0009. Estrategia de testing
+# 0009. Qué se prueba y cómo
 
 ## Contexto
 
-El mayor riesgo está en el cálculo de la simulación y en la integración con una API externa lenta. Los tests nunca deben depender de ella.
+Donde más fácil es equivocarse es en la cuenta de la simulación y en la conexión con una API externa lenta. Los tests no pueden depender de esa API.
 
 ## Decisión
 
-Vitest en todos los workspaces; se prueba comportamiento externo a través de interfaces públicas.
+Vitest en las tres partes, probando lo que cada parte hace hacia afuera y no cómo lo hace por dentro.
 
-- Motor de simulación: TDD con tests unitarios sobre funciones puras.
-- API: tests de integración con Supertest sobre la app, con MSW simulando la API F1.
-- Web: React Testing Library con MSW, probando lo que ve el usuario.
-- Sin tests end-to-end.
+- **Cálculo de la simulación:** se escribió con TDD, test primero, con tiempos esperados exactos.
+- **API:** tests que le hacen pedidos reales a la app con Supertest, mientras MSW se hace pasar por la API de F1.
+- **Web:** tests con React Testing Library que buscan lo que ve el usuario, también con MSW.
+- Sin tests de punta a punta en un navegador.
 
 ## Consecuencias
 
-- (+) Rápidos, deterministas y sin red.
-- (+) El núcleo de lógica tiene la cobertura más fina; los tests de integración cubren el contrato y los errores.
-- (−) Sin E2E no se prueba el proxy de Vite ni el navegador real; Playwright queda como mejora.
+- Los tests son rápidos, dan siempre lo mismo y no necesitan internet.
+- No se prueba la app en un navegador real; agregar Playwright queda como mejora.
