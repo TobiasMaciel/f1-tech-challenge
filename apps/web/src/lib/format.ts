@@ -3,10 +3,10 @@ export function formatPercent(fraction: number): string {
   return `${Math.round(fraction * 100)} %`;
 }
 
-/** 1.8 -> "+1.8 s", -1 -> "-1.0 s". */
-export function formatSignedSeconds(seconds: number): string {
+/** 1.8 -> "+1.8 s", -1 -> "-1.0 s"; `decimals` sets the precision: (-32.4, 3) -> "-32.400 s". */
+export function formatSignedSeconds(seconds: number, decimals = 1): string {
   const sign = seconds > 0 ? '+' : '';
-  return `${sign}${seconds.toFixed(1)} s`;
+  return `${sign}${seconds.toFixed(decimals)} s`;
 }
 
 /** 91.5 -> "1:31.500"; from one hour up it adds the hours: 3725.25 -> "1:02:05.250". */

@@ -2,6 +2,12 @@ import { useMutation, useQueryClient, type MutateOptions } from '@tanstack/react
 import type { SimulationRequest, SimulationResponse } from '@f1/shared';
 import { apiPost, type ApiError } from '@/lib/api-client';
 
+/** A successful simulation together with the request that produced it. */
+export interface SimulationRun {
+  request: SimulationRequest;
+  result: SimulationResponse;
+}
+
 const SIMULATION_KEY = ['simulation'];
 
 /**

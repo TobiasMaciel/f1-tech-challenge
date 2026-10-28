@@ -15,7 +15,7 @@ import { StrategyBar } from './strategy-bar';
 import { StintsForm, type StintRow } from './stints-form';
 import { isValidLapCount } from './stint-layout';
 import { getSubmitBlockers } from './submit-blockers';
-import { useDrivers } from './use-drivers';
+import { useDrivers } from '@/hooks/use-drivers';
 
 interface StrategyBuilderProps {
   raceId: string;

@@ -51,7 +51,6 @@ Detalle y fórmulas en [`docs/simulation-model.md`](docs/simulation-model.md).
 
 ## Qué mejoraría con más tiempo
 
-- Comparar el resultado con la simulación anterior.
 - Calcular la estrategia óptima.
 - Repetición animada de la carrera.
 - Tests end-to-end con Playwright.

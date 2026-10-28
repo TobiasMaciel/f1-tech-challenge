@@ -1,14 +1,17 @@
 import type { SimulationResponse } from '@f1/shared';
 import { InfoHint } from '@/components/info-hint';
 import { formatDuration, formatRaceTime, formatSignedSeconds } from '@/lib/format';
-import { summarizeTime } from './time-summary';
+import { cn } from '@/lib/utils';
+import { summarizeTime, type TimeTermKey } from './time-summary';
 
 interface TimeBreakdownProps {
   result: SimulationResponse;
+  /** Seconds each term changed against the previous simulation; undefined when there is none. */
+  deltas?: Record<TimeTermKey, number>;
 }
 
 /** Each term of the lap time model as seconds gained or lost against the reference race. */
-export function TimeBreakdown({ result }: TimeBreakdownProps) {
+export function TimeBreakdown({ result, deltas }: TimeBreakdownProps) {
   const { reference, terms } = summarizeTime(result);
   const largest = Math.max(...terms.map((term) => Math.abs(term.seconds)));
 
@@ -36,7 +39,10 @@ export function TimeBreakdown({ result }: TimeBreakdownProps) {
           return (
             <li
               key={term.key}
-              className="grid grid-cols-[6.5rem_minmax(0,1fr)_4.5rem] items-center gap-3 text-sm"
+              className={cn(
+                'grid grid-cols-[6.5rem_minmax(0,1fr)_4.5rem] items-center gap-3 text-sm',
+                deltas && 'grid-cols-[6.5rem_minmax(0,1fr)_4.5rem_4.5rem]',
+              )}
             >
               <span>{term.label}</span>
               <span className="h-2 rounded-full bg-muted">
@@ -46,6 +52,15 @@ export function TimeBreakdown({ result }: TimeBreakdownProps) {
                 />
               </span>
               <span className="text-right tabular-nums">{formatSignedSeconds(term.seconds)}</span>
+              {deltas && (
+                <span
+                  className="text-right text-xs text-muted-foreground tabular-nums"
+                  title="Frente a la simulación anterior"
+                >
+                  <span className="sr-only">Frente a la anterior: </span>
+                  {formatSignedSeconds(deltas[term.key])}
+                </span>
+              )}
             </li>
           );
         })}

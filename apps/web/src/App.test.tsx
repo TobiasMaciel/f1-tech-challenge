@@ -333,6 +333,31 @@ describe('resultado de la simulación', () => {
     await waitFor(() => expect(screen.queryByText(notice)).not.toBeInTheDocument());
   });
 
+  it('muestra la diferencia con la simulación anterior de la misma carrera y la quita al cambiar de carrera', async () => {
+    const totalTimes = [5270.058, 5237.658];
+    server.use(
+      http.post('*/api/simulations', () =>
+        HttpResponse.json({ ...simulationResponse, totalTime: totalTimes.shift() }),
+      ),
+    );
+    await openStrategyBuilder();
+    await fillLaps('20', '37');
+    await userEvent.click(screen.getByRole('button', { name: 'Simular' }));
+    await screen.findAllByText('1:27:50.058');
+    expect(screen.queryByText(/frente a la anterior/)).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Simular' }));
+
+    expect(await screen.findByText('-32.400 s frente a la anterior')).toBeInTheDocument();
+    expect(screen.getByText('Anterior:').parentElement).toHaveTextContent('S20H37');
+    const summary = screen.getByRole('region', { name: 'Dónde se fue el tiempo' });
+    expect(within(summary).getByText('Paradas').parentElement).toHaveTextContent('0.0 s');
+
+    await userEvent.click(screen.getByRole('button', { name: /British Grand Prix/ }));
+
+    await waitFor(() => expect(screen.queryByText(/frente a la anterior/)).not.toBeInTheDocument());
+  });
+
   it('no pide completar los stints si la carrera no se pudo cargar', async () => {
     server.use(
       http.get('*/api/races/race-01', () =>

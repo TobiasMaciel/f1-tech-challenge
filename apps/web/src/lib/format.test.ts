@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuration, getSecondTicks } from './format';
+import { formatDuration, formatSignedSeconds, getSecondTicks } from './format';
+
+describe('formatSignedSeconds', () => {
+  it('muestra el signo y un decimal por defecto', () => {
+    expect(formatSignedSeconds(1.8)).toBe('+1.8 s');
+    expect(formatSignedSeconds(-1)).toBe('-1.0 s');
+  });
+
+  it('acepta la cantidad de decimales', () => {
+    expect(formatSignedSeconds(-32.4, 3)).toBe('-32.400 s');
+  });
+});
 
 describe('formatDuration', () => {
   it('muestra minutos, segundos y milésimas por debajo de una hora', () => {

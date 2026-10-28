@@ -1,4 +1,5 @@
 import type { SimulationResponse } from '@f1/shared';
+import type { SimulationRun } from '@/hooks/use-simulation';
 import { RefreshCw } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { useCountUp } from '@/hooks/use-count-up';
@@ -11,8 +12,10 @@ import { getCompoundInfo } from '@/lib/compounds';
 import { formatDuration, formatRaceTime, formatSignedSeconds } from '@/lib/format';
 import { prefersReducedMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
+import { compareSimulations } from './compare-simulations';
 import { buildConclusion } from './conclusion';
 import { PitStopsList } from './pit-stops-list';
+import { PreviousComparison } from './previous-comparison';
 import { TimeBreakdown } from './time-breakdown';
 
 // The chart library is the heaviest dependency and only needed after a simulation, so it loads in its own chunk.
@@ -24,6 +27,10 @@ interface SimulationResultProps {
   raceId: string;
   /** Undefined until the first simulation of the selected race. */
   result: SimulationResponse | undefined;
+  /** The simulation before this one in the same race; undefined until there are two. */
+  previous: SimulationRun | undefined;
+  /** Driver of this result, to tell whether the previous one used another. */
+  currentDriverId: string | undefined;
   /** The strategy changed after this result: it stays visible, dimmed, until the next simulation. */
   isStale: boolean;
 }
@@ -43,7 +50,13 @@ function TotalTime({ seconds }: { seconds: number }) {
   );
 }
 
-export function SimulationResult({ raceId, result, isStale }: SimulationResultProps) {
+export function SimulationResult({
+  raceId,
+  result,
+  previous,
+  currentDriverId,
+  isStale,
+}: SimulationResultProps) {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { data: raceDetail } = useRaceDetail(raceId);
 
@@ -56,6 +69,8 @@ export function SimulationResult({ raceId, result, isStale }: SimulationResultPr
     });
     titleRef.current?.focus({ preventScroll: true });
   }, [result]);
+
+  const comparison = result && previous && compareSimulations(result, previous.result);
 
   return (
     <section aria-labelledby="simulation-result-title" className="space-y-5">
@@ -97,8 +112,15 @@ export function SimulationResult({ raceId, result, isStale }: SimulationResultPr
                   {result.laps.length} vueltas · {result.stints.length} stints ·{' '}
                   {result.pitStops.length === 1 ? '1 parada' : `${result.pitStops.length} paradas`}
                 </p>
+                {previous && comparison && (
+                  <PreviousComparison
+                    totalDelta={comparison.totalDelta}
+                    previous={previous}
+                    currentDriverId={currentDriverId}
+                  />
+                )}
               </div>
-              <TimeBreakdown key={result.totalTime} result={result} />
+              <TimeBreakdown key={result.totalTime} result={result} deltas={comparison?.terms} />
             </div>
 
             <div className="grid grid-cols-1 items-start gap-4 2xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">

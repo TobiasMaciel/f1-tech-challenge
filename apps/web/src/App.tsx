@@ -4,7 +4,7 @@ import { RaceOverview } from '@/features/race-overview/race-overview';
 import { RaceSelection } from '@/features/race-selection/race-selection';
 import { SimulationResult } from '@/features/simulation-result/simulation-result';
 import { StrategyBuilder } from '@/features/strategy-builder/strategy-builder';
-import { useSimulation } from '@/hooks/use-simulation';
+import { useSimulation, type SimulationRun } from '@/hooks/use-simulation';
 
 /** Short fade and slide-in when a section appears; no movement under reduced motion. */
 const SECTION_ENTER =
@@ -15,12 +15,15 @@ export function App() {
   const [selectedDriverId, setSelectedDriverId] = useState<string | null>(null);
   // True when the driver or the stints changed after the last simulation, so the result no longer matches them.
   const [isResultStale, setIsResultStale] = useState(false);
+  // The last two successful simulations of the selected race, to compare the new result with the one before.
+  const [runs, setRuns] = useState<{ current?: SimulationRun; previous?: SimulationRun }>({});
   const simulation = useSimulation();
 
   function selectRace(raceId: string) {
     setSelectedRaceId(raceId);
     simulation.reset();
     setIsResultStale(false);
+    setRuns({});
   }
 
   function selectDriver(driverId: string) {
@@ -29,7 +32,12 @@ export function App() {
   }
 
   function simulate(request: SimulationRequest) {
-    simulation.simulate(request, { onSuccess: () => setIsResultStale(false) });
+    simulation.simulate(request, {
+      onSuccess: (result) => {
+        setIsResultStale(false);
+        setRuns(({ current }) => ({ current: { request, result }, previous: current }));
+      },
+    });
   }
 
   return (
@@ -73,6 +81,8 @@ export function App() {
             <SimulationResult
               raceId={selectedRaceId}
               result={simulation.data}
+              previous={runs.previous}
+              currentDriverId={runs.current?.request.driverId}
               isStale={isResultStale}
             />
           </div>
