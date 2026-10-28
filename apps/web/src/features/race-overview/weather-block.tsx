@@ -1,5 +1,6 @@
 import type { RaceDetailResponse } from '@f1/shared';
-import { WeatherBar } from '@/components/weather-bar';
+import { InfoHint } from '@/components/info-hint';
+import { FORECAST_SEGMENTS_HINT, WeatherBar } from '@/components/weather-bar';
 import { describeRain, getRainLevel } from '@/lib/rain';
 import { cn } from '@/lib/utils';
 
@@ -12,8 +13,9 @@ export function WeatherBlock({ weather, totalLaps }: WeatherBlockProps) {
   return (
     <section aria-labelledby="weather-title" className="space-y-4 rounded-lg border bg-card p-4">
       <div className="space-y-1">
-        <h3 id="weather-title" className="font-semibold">
+        <h3 id="weather-title" className="flex items-center gap-1.5 font-semibold">
           Clima
+          <InfoHint term="los tramos del clima">{FORECAST_SEGMENTS_HINT}</InfoHint>
         </h3>
         <p className="text-sm text-muted-foreground">{weather.summary}</p>
       </div>

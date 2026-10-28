@@ -1,9 +1,10 @@
 import { simulationRequestSchema, type SimulationRequest } from '@f1/shared';
 import { useState } from 'react';
 import { ErrorAlert } from '@/components/error-alert';
+import { InfoHint } from '@/components/info-hint';
 import { LoadingNotice } from '@/components/loading-notice';
 import { SectionHeading } from '@/components/section-heading';
-import { WeatherBar } from '@/components/weather-bar';
+import { FORECAST_SEGMENTS_HINT, WeatherBar } from '@/components/weather-bar';
 import { useRaceDetail } from '@/hooks/use-race-detail';
 import type { ApiError } from '@/lib/api-client';
 import { DriverCard, DriverCardSkeleton } from './driver-card';
@@ -126,7 +127,10 @@ export function StrategyBuilder({
           <div className="space-y-6 rounded-lg border bg-card p-4">
             <h3 className="font-semibold">Stints</h3>
             <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-3 gap-y-1 text-xs text-muted-foreground">
-              <span className="self-center">Clima</span>
+              <span className="flex items-center gap-1 self-center">
+                Clima
+                <InfoHint term="los tramos del clima">{FORECAST_SEGMENTS_HINT}</InfoHint>
+              </span>
               <WeatherBar
                 forecast={raceDetail.weather.forecast}
                 totalLaps={raceDetail.race.laps}

@@ -2,6 +2,10 @@ import type { ForecastSegment } from '@f1/shared';
 import { describeRain, getRainLevel } from '@/lib/rain';
 import { cn } from '@/lib/utils';
 
+/** Explains why a dry race still shows several segments. */
+export const FORECAST_SEGMENTS_HINT =
+  'El pronóstico llega dividido en tramos de vueltas, cada uno con su lluvia y temperatura; se muestran aunque el clima no cambie entre ellos.';
+
 interface WeatherBarProps {
   forecast: ForecastSegment[];
   totalLaps: number;
