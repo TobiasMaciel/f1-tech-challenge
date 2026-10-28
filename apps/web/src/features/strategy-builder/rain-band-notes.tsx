@@ -3,7 +3,7 @@ import { describeRainBandWarning, type RainBandWarning } from './rain-band-warni
 
 /**
  * One line per stint range whose compound is out of its optimal rain band: a red alert when there is
- * too much rain for the tyre, a neutral note when a rain tyre runs with too little rain.
+ * too much rain for the tyre, an amber note when a rain tyre runs with too little rain.
  */
 export function RainBandNotes({ warnings }: { warnings: RainBandWarning[] }) {
   if (warnings.length === 0) return null;

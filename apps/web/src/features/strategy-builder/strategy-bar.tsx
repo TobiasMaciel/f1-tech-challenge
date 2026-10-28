@@ -1,8 +1,7 @@
-import { cn } from '@/lib/utils';
 import { getCompoundInfo } from '@/lib/compounds';
+import { cn } from '@/lib/utils';
 import type { RainBandWarning } from './rain-band-warnings';
-import { layoutStints } from './stint-layout';
-import type { StintRow } from './stints-form';
+import { layoutStints, type StintRow } from './stint-layout';
 import { placeStopLabels } from './stop-labels';
 
 interface StrategyBarProps {

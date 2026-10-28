@@ -1,4 +1,4 @@
-import type { StintRow } from './stints-form';
+import type { StintRow } from './stint-layout';
 
 interface Issue {
   path: PropertyKey[];

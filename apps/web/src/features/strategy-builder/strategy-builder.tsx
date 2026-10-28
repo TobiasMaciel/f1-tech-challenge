@@ -5,18 +5,18 @@ import { InfoHint } from '@/components/info-hint';
 import { LoadingNotice } from '@/components/loading-notice';
 import { SectionHeading } from '@/components/section-heading';
 import { FORECAST_SEGMENTS_HINT, WeatherBar } from '@/components/weather-bar';
+import { useDrivers } from '@/hooks/use-drivers';
 import { useRaceDetail } from '@/hooks/use-race-detail';
 import type { ApiError } from '@/lib/api-client';
 import { DriverCard, DriverCardSkeleton } from './driver-card';
 import { DriverPicker } from './driver-picker';
-import { toRowErrors } from './row-errors';
 import { RainBandNotes } from './rain-band-notes';
 import { getRainBandWarnings } from './rain-band-warnings';
+import { toRowErrors } from './row-errors';
+import { isValidLapCount, type StintRow } from './stint-layout';
+import { StintsForm } from './stints-form';
 import { StrategyBar } from './strategy-bar';
-import { StintsForm, type StintRow } from './stints-form';
-import { isValidLapCount } from './stint-layout';
 import { getSubmitBlockers } from './submit-blockers';
-import { useDrivers } from '@/hooks/use-drivers';
 
 interface StrategyBuilderProps {
   raceId: string;
@@ -54,12 +54,18 @@ export function StrategyBuilder({
   const { data: raceDetail } = useRaceDetail(raceId);
   const [rows, setRows] = useState(INITIAL_ROWS);
   const [nextRowId, setNextRowId] = useState(INITIAL_ROWS.length + 1);
-  const isLoading = isFetching && !data;
 
   function updateRows(nextRows: StintRow[]) {
     setRows(nextRows);
     onStintsChange();
   }
+
+  function addRow() {
+    updateRows([...rows, { id: nextRowId, compound: 'MEDIUM', laps: undefined }]);
+    setNextRowId(nextRowId + 1);
+  }
+
+  const isLoading = isFetching && !data;
   const selectedDriver = data?.drivers.find((driver) => driver.id === selectedDriverId);
 
   const parsed = simulationRequestSchema.safeParse({
@@ -153,10 +159,7 @@ export function StrategyBuilder({
               onChangeRow={(id, changes) =>
                 updateRows(rows.map((row) => (row.id === id ? { ...row, ...changes } : row)))
               }
-              onAddRow={() => {
-                updateRows([...rows, { id: nextRowId, compound: 'MEDIUM', laps: undefined }]);
-                setNextRowId(nextRowId + 1);
-              }}
+              onAddRow={addRow}
               onRemoveRow={(id) => updateRows(rows.filter((row) => row.id !== id))}
               onSubmit={() => parsed.success && onSimulate(parsed.data)}
             />

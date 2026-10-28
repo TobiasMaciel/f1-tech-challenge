@@ -5,26 +5,30 @@ export function formatPercent(fraction: number): string {
 
 /** 1.8 -> "+1.8 s", -1 -> "-1.0 s"; `decimals` sets the precision: (-32.4, 3) -> "-32.400 s". */
 export function formatSignedSeconds(seconds: number, decimals = 1): string {
-  const sign = seconds > 0 ? '+' : '';
-  return `${sign}${seconds.toFixed(decimals)} s`;
+  // The sign follows the rounded value, so float noise like 0.04 or -0.04 reads "0.0 s".
+  const rounded = Number(seconds.toFixed(decimals));
+  const sign = rounded > 0 ? '+' : '';
+  return `${sign}${rounded.toFixed(decimals)} s`;
+}
+
+function formatClock(seconds: number, alwaysShowHours: boolean): string {
+  const totalMilliseconds = Math.round(seconds * 1000);
+  const hours = Math.floor(totalMilliseconds / 3_600_000);
+  const minutes = Math.floor((totalMilliseconds % 3_600_000) / 60_000);
+  const rest = ((totalMilliseconds % 60_000) / 1000).toFixed(3).padStart(6, '0');
+  return hours > 0 || alwaysShowHours
+    ? `${hours}:${String(minutes).padStart(2, '0')}:${rest}`
+    : `${minutes}:${rest}`;
 }
 
 /** 91.5 -> "1:31.500"; from one hour up it adds the hours: 3725.25 -> "1:02:05.250". */
 export function formatDuration(seconds: number): string {
-  const totalMilliseconds = Math.round(seconds * 1000);
-  const hours = Math.floor(totalMilliseconds / 3_600_000);
-  const minutes = Math.floor((totalMilliseconds % 3_600_000) / 60_000);
-  const rest = ((totalMilliseconds % 60_000) / 1000).toFixed(3).padStart(6, '0');
-  return hours > 0 ? `${hours}:${String(minutes).padStart(2, '0')}:${rest}` : `${minutes}:${rest}`;
+  return formatClock(seconds, false);
 }
 
-/** 5270.058 -> "1:27:50.058". */
+/** Always with hours, as race totals read: 5270.058 -> "1:27:50.058". */
 export function formatRaceTime(seconds: number): string {
-  const totalMilliseconds = Math.round(seconds * 1000);
-  const hours = Math.floor(totalMilliseconds / 3_600_000);
-  const minutes = Math.floor((totalMilliseconds % 3_600_000) / 60_000);
-  const rest = ((totalMilliseconds % 60_000) / 1000).toFixed(3).padStart(6, '0');
-  return `${hours}:${String(minutes).padStart(2, '0')}:${rest}`;
+  return formatClock(seconds, true);
 }
 
 /** Round steps, in seconds, a chart axis can use between two ticks. */

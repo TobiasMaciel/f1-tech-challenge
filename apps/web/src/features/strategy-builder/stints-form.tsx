@@ -1,4 +1,3 @@
-import type { Compound } from '@f1/shared';
 import { Plus, Trash2 } from 'lucide-react';
 import { CompoundBadge } from '@/components/compound-badge';
 import { Button } from '@/components/ui/button';
@@ -11,13 +10,7 @@ import {
 } from '@/components/ui/select';
 import { COMPOUNDS } from '@/lib/compounds';
 import { cn } from '@/lib/utils';
-
-/** A stint being edited; `laps` is undefined while the input is empty. */
-export interface StintRow {
-  id: number;
-  compound: Compound;
-  laps: number | undefined;
-}
+import type { StintRow } from './stint-layout';
 
 interface StintsFormProps {
   rows: StintRow[];
@@ -44,6 +37,7 @@ const DIGITS_ONLY = /^\d*$/;
 
 const COMPOUND_ITEMS = COMPOUNDS.map(({ compound, label }) => ({ value: compound, label }));
 
+/** Editable list of stints with the lap counter, the API error and the submit button. */
 export function StintsForm({
   rows,
   raceLaps,

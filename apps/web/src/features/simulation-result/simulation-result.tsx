@@ -1,21 +1,19 @@
 import type { SimulationResponse } from '@f1/shared';
-import type { SimulationRun } from '@/hooks/use-simulation';
 import { RefreshCw } from 'lucide-react';
 import { lazy, Suspense, useEffect, useRef } from 'react';
+import { EmptyState } from '@/components/empty-state';
+import { SectionHeading } from '@/components/section-heading';
 import { useCountUp } from '@/hooks/use-count-up';
 import { useRaceDetail } from '@/hooks/use-race-detail';
-import { CompoundBadge } from '@/components/compound-badge';
-import { EmptyState } from '@/components/empty-state';
-import { HorizontalScroll } from '@/components/horizontal-scroll';
-import { SectionHeading } from '@/components/section-heading';
-import { getCompoundInfo } from '@/lib/compounds';
-import { formatDuration, formatRaceTime, formatSignedSeconds } from '@/lib/format';
+import type { SimulationRun } from '@/hooks/use-simulation';
+import { formatRaceTime } from '@/lib/format';
 import { prefersReducedMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { compareSimulations } from './compare-simulations';
 import { buildConclusion } from './conclusion';
 import { PitStopsList } from './pit-stops-list';
 import { PreviousComparison } from './previous-comparison';
+import { StintsTable } from './stints-table';
 import { TimeBreakdown } from './time-breakdown';
 
 // The chart library is the heaviest dependency and only needed after a simulation, so it loads in its own chunk.
@@ -35,9 +33,6 @@ interface SimulationResultProps {
   isStale: boolean;
 }
 
-const NUMBER_CELL = 'px-3 py-2.5 text-right';
-const NUMBER_HEADER = 'px-3 py-2 text-right font-normal';
-
 /** The total counts up for the eyes; screen readers get the final time only. */
 function TotalTime({ seconds }: { seconds: number }) {
   const shown = useCountUp(seconds, 500);
@@ -50,6 +45,7 @@ function TotalTime({ seconds }: { seconds: number }) {
   );
 }
 
+/** Step 4: total time, where it went, stints, pit stops and lap chart of the last simulation. */
 export function SimulationResult({
   raceId,
   result,
@@ -70,7 +66,8 @@ export function SimulationResult({
     titleRef.current?.focus({ preventScroll: true });
   }, [result]);
 
-  const comparison = result && previous && compareSimulations(result, previous.result);
+  const comparison =
+    result && previous ? { previous, ...compareSimulations(result, previous.result) } : undefined;
 
   return (
     <section aria-labelledby="simulation-result-title" className="space-y-5">
@@ -112,70 +109,20 @@ export function SimulationResult({
                   {result.laps.length} vueltas · {result.stints.length} stints ·{' '}
                   {result.pitStops.length === 1 ? '1 parada' : `${result.pitStops.length} paradas`}
                 </p>
-                {previous && comparison && (
+                {comparison && (
                   <PreviousComparison
                     totalDelta={comparison.totalDelta}
-                    previous={previous}
+                    previous={comparison.previous}
                     currentDriverId={currentDriverId}
                   />
                 )}
               </div>
+              {/* A new total remounts the breakdown so its bars animate again; an identical re-run keeps them still. */}
               <TimeBreakdown key={result.totalTime} result={result} deltas={comparison?.terms} />
             </div>
 
             <div className="grid grid-cols-1 items-start gap-4 2xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-              <section
-                aria-labelledby="stints-table-title"
-                className="space-y-3 rounded-lg border bg-card p-4"
-              >
-                <h3 id="stints-table-title" className="font-semibold">
-                  Stints
-                </h3>
-                <HorizontalScroll>
-                  <table className="w-full min-w-[42rem] text-sm whitespace-nowrap tabular-nums">
-                    <caption className="sr-only">Stints de la estrategia</caption>
-                    <thead className="text-xs text-muted-foreground">
-                      <tr>
-                        <th className="py-2 pr-3 text-left font-normal">Stint</th>
-                        <th className="px-3 py-2 text-left font-normal">Compuesto</th>
-                        <th className={NUMBER_HEADER}>Vueltas</th>
-                        <th className={NUMBER_HEADER}>Cantidad</th>
-                        <th className={NUMBER_HEADER}>Tiempo</th>
-                        <th className={NUMBER_HEADER}>Vuelta promedio</th>
-                        <th className={NUMBER_HEADER}>Pérdida por degradación</th>
-                        <th className={`${NUMBER_HEADER} pr-0`}>Pérdida por lluvia</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {result.stints.map((stint) => (
-                        <tr key={stint.number} className="border-t">
-                          <td className="py-2.5 pr-3">{stint.number}</td>
-                          <td className="px-3 py-2.5">
-                            <span className="flex items-center gap-2">
-                              <CompoundBadge compound={stint.compound} />
-                              <span aria-hidden="true">
-                                {getCompoundInfo(stint.compound).label}
-                              </span>
-                            </span>
-                          </td>
-                          <td className={NUMBER_CELL}>
-                            {stint.startLap}–{stint.endLap}
-                          </td>
-                          <td className={NUMBER_CELL}>{stint.laps}</td>
-                          <td className={NUMBER_CELL}>{formatDuration(stint.time)}</td>
-                          <td className={NUMBER_CELL}>{formatDuration(stint.averageLapTime)}</td>
-                          <td className={NUMBER_CELL}>
-                            {formatSignedSeconds(stint.degradationLoss)}
-                          </td>
-                          <td className={`${NUMBER_CELL} pr-0`}>
-                            {formatSignedSeconds(stint.weatherLoss)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </HorizontalScroll>
-              </section>
+              <StintsTable stints={result.stints} />
               <PitStopsList pitStops={result.pitStops} />
             </div>
 

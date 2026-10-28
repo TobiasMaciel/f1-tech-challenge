@@ -1,12 +1,13 @@
 import { ErrorAlert } from '@/components/error-alert';
 import { LoadingNotice } from '@/components/loading-notice';
 import { SectionHeading } from '@/components/section-heading';
+import { useRaceDetail } from '@/hooks/use-race-detail';
 import { CircuitBlock } from './circuit-block';
 import { RisksLine } from './risks-line';
 import { TyresBlock } from './tyres-block';
-import { useRaceDetail } from '@/hooks/use-race-detail';
 import { WeatherBlock } from './weather-block';
 
+/** Step 2: the circuit, weather, tyres and risks of the selected race. */
 export function RaceOverview({ raceId }: { raceId: string }) {
   const { data, error, isFetching, refetch } = useRaceDetail(raceId);
   const isLoading = isFetching && !data;

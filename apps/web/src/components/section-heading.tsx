@@ -11,6 +11,7 @@ interface SectionHeadingProps {
   titleRef?: Ref<HTMLHeadingElement>;
 }
 
+/** Numbered title of a step in the page flow, with an optional instruction below. */
 export function SectionHeading({ step, id, title, description, titleRef }: SectionHeadingProps) {
   return (
     <div className="space-y-1">

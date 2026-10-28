@@ -6,6 +6,7 @@ interface PitStopsListProps {
   pitStops: PitStopResult[];
 }
 
+/** Each pit stop with the compound change and the time it cost. */
 export function PitStopsList({ pitStops }: PitStopsListProps) {
   return (
     <section aria-labelledby="pit-stops-title" className="space-y-3 rounded-lg border bg-card p-4">

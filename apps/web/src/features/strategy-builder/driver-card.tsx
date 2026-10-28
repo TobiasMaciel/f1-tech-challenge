@@ -5,6 +5,7 @@ interface DriverCardProps {
   driver: DriverWithTeam;
 }
 
+/** Stats of the selected driver and car. */
 export function DriverCard({ driver }: DriverCardProps) {
   const stats = [
     {

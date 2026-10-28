@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import type { RaceDetailResponse } from '@f1/shared';
+import { useQuery } from '@tanstack/react-query';
 import { apiGet, type ApiError } from '@/lib/api-client';
 
 /** Fetches the circuit, weather, simulation parameters and tyres of one race. */

@@ -5,7 +5,7 @@ import {
   getRainBandWarnings,
   type RainBandWarning,
 } from './rain-band-warnings';
-import type { StintRow } from './stints-form';
+import type { StintRow } from './stint-layout';
 
 const soft: TyreInfo = {
   compound: 'SOFT',

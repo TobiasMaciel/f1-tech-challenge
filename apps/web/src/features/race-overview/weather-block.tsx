@@ -9,6 +9,7 @@ interface WeatherBlockProps {
   totalLaps: number;
 }
 
+/** Race forecast as a bar aligned with the laps and as a table per segment. */
 export function WeatherBlock({ weather, totalLaps }: WeatherBlockProps) {
   return (
     <section aria-labelledby="weather-title" className="space-y-4 rounded-lg border bg-card p-4">

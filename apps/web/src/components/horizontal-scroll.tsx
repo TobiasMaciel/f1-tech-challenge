@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  * Lets a wide table scroll sideways inside its card (bleeding to the card edges) and, while there is
  * more to the right, fades that edge and shows a short hint so the cut content does not look clipped.
  */
-export function HorizontalScroll({ children }: { children: ReactNode }) {
+export function HorizontalScroll({ label, children }: { label: string; children: ReactNode }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [overflows, setOverflows] = useState(false);
   const [hasMoreRight, setHasMoreRight] = useState(false);
@@ -32,6 +32,8 @@ export function HorizontalScroll({ children }: { children: ReactNode }) {
           ref={scrollRef}
           // Focusable while it scrolls, so keyboard users can move it with the arrow keys.
           tabIndex={overflows ? 0 : undefined}
+          role="region"
+          aria-label={label}
           className="overflow-x-auto px-4 focus-visible:outline-2 focus-visible:outline-ring"
         >
           {children}

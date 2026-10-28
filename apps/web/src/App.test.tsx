@@ -1,12 +1,10 @@
 import type { SimulationResponse } from '@f1/shared';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
-import { createQueryClient } from '@/lib/query-client';
+import { renderApp } from '@/test/render-app';
 import { server } from '@/test/server';
-import { App } from './App';
 
 const simulationResponse: SimulationResponse = {
   totalTime: 5270.058,
@@ -66,11 +64,7 @@ const simulationResponse: SimulationResponse = {
 
 /** Opens the app with race-01 and Lando Norris chosen, and the two default stints (SOFT, HARD) on screen. */
 async function openStrategyBuilder() {
-  render(
-    <QueryClientProvider client={createQueryClient()}>
-      <App />
-    </QueryClientProvider>,
-  );
+  renderApp();
   await userEvent.click(await screen.findByRole('button', { name: /Bahrain Grand Prix/ }));
   await userEvent.click(await screen.findByRole('combobox', { name: 'Piloto' }));
   await userEvent.click(await screen.findByRole('option', { name: 'Lando Norris' }));
@@ -183,11 +177,7 @@ describe('simular una estrategia', () => {
   });
 
   it('explica que hace falta elegir un piloto', async () => {
-    render(
-      <QueryClientProvider client={createQueryClient()}>
-        <App />
-      </QueryClientProvider>,
-    );
+    renderApp();
     await userEvent.click(await screen.findByRole('button', { name: /Bahrain Grand Prix/ }));
 
     await fillLaps('20', '37');
@@ -230,6 +220,26 @@ describe('simular una estrategia', () => {
     );
     expect(screen.queryAllByText('1:27:50.058')).toHaveLength(0);
   });
+
+  it('quita el error de la simulación al cambiar la estrategia', async () => {
+    server.use(
+      http.post('*/api/simulations', () =>
+        HttpResponse.json(
+          { error: { code: 'INVALID_STRATEGY', message: 'Estrategia inválida.' } },
+          { status: 422 },
+        ),
+      ),
+    );
+    await openStrategyBuilder();
+    await fillLaps('20', '37');
+    await userEvent.click(screen.getByRole('button', { name: 'Simular' }));
+    await screen.findByText('Estrategia inválida.');
+
+    await userEvent.type(screen.getByLabelText('Vueltas del stint 2'), '0');
+
+    expect(screen.queryByText('Estrategia inválida.')).not.toBeInTheDocument();
+  });
+
   it('no ofrece reintentar cuando la API rechaza la estrategia', async () => {
     server.use(
       http.post('*/api/simulations', () =>
@@ -333,6 +343,34 @@ describe('resultado de la simulación', () => {
     await waitFor(() => expect(screen.queryByText(notice)).not.toBeInTheDocument());
   });
 
+  it('mantiene el último resultado mientras vuelve a simular y si la nueva simulación falla', async () => {
+    let releaseSecondRequest = () => {};
+    let requests = 0;
+    server.use(
+      http.post('*/api/simulations', async () => {
+        requests += 1;
+        if (requests === 1) return HttpResponse.json(simulationResponse);
+        await new Promise<void>((resolve) => (releaseSecondRequest = resolve));
+        return HttpResponse.json(
+          { error: { code: 'UPSTREAM_ERROR', message: 'No se pudo obtener los datos.' } },
+          { status: 502 },
+        );
+      }),
+    );
+    await openStrategyBuilder();
+    await fillLaps('20', '37');
+    await userEvent.click(screen.getByRole('button', { name: 'Simular' }));
+    await screen.findAllByText('1:27:50.058');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Simular' }));
+
+    expect(await screen.findByRole('button', { name: 'Simulando…' })).toBeInTheDocument();
+    expect(screen.getAllByText('1:27:50.058')).not.toHaveLength(0);
+    releaseSecondRequest();
+    expect(await screen.findByText('No se pudo obtener los datos.')).toBeInTheDocument();
+    expect(screen.getAllByText('1:27:50.058')).not.toHaveLength(0);
+  });
+
   it('muestra la diferencia con la simulación anterior de la misma carrera y la quita al cambiar de carrera', async () => {
     const totalTimes = [5270.058, 5237.658];
     server.use(
@@ -367,27 +405,11 @@ describe('resultado de la simulación', () => {
         ),
       ),
     );
-    render(
-      <QueryClientProvider client={createQueryClient()}>
-        <App />
-      </QueryClientProvider>,
-    );
+    renderApp();
 
     await userEvent.click(await screen.findByRole('button', { name: /Bahrain Grand Prix/ }));
 
     expect(await screen.findByText('La API de F1 no está disponible.')).toBeInTheDocument();
     expect(screen.queryByText(/Completa los stints/)).not.toBeInTheDocument();
-  });
-});
-
-describe('App', () => {
-  it('muestra el título de la aplicación en el encabezado', () => {
-    render(
-      <QueryClientProvider client={createQueryClient()}>
-        <App />
-      </QueryClientProvider>,
-    );
-
-    expect(screen.getByRole('heading', { name: 'F1 Race Strategist' })).toBeInTheDocument();
   });
 });

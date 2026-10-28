@@ -1,8 +1,8 @@
 import type { RaceSummary } from '@f1/shared';
 import { CloudRain } from 'lucide-react';
 import { CircuitTrack } from '@/components/circuit-track';
-import { cn } from '@/lib/utils';
 import { CountryFlag } from '@/components/country-flag';
+import { cn } from '@/lib/utils';
 
 interface RaceCardProps {
   race: RaceSummary;
@@ -14,6 +14,7 @@ interface RaceCardProps {
 const CARD_LAYOUT =
   'grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-x-4 sm:flex sm:flex-col sm:items-stretch sm:gap-3';
 
+/** Selectable card of a race with its track and circuit. */
 export function RaceCard({ race, selected, onSelect }: RaceCardProps) {
   return (
     <button

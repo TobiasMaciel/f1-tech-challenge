@@ -1,4 +1,11 @@
-import type { StintRow } from './stints-form';
+import type { Compound } from '@f1/shared';
+
+/** A stint being edited; `laps` is undefined while the input is empty. */
+export interface StintRow {
+  id: number;
+  compound: Compound;
+  laps: number | undefined;
+}
 
 export interface LaidOutStint {
   id: number;

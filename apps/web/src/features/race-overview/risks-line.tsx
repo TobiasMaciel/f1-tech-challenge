@@ -7,6 +7,7 @@ type RisksLineProps = Pick<
   'safetyCarProbability' | 'lapTimeVariance'
 >;
 
+/** Safety car probability and lap time variability of the race. */
 export function RisksLine({ safetyCarProbability, lapTimeVariance }: RisksLineProps) {
   return (
     <div className="flex items-start gap-3 rounded-lg border bg-card p-4 text-sm">

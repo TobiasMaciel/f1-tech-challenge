@@ -11,6 +11,7 @@ interface RaceSelectionProps {
 
 const GRID = 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-7';
 
+/** Step 1: the season races as cards; choosing one opens the rest of the page. */
 export function RaceSelection({ selectedRaceId, onSelectRace }: RaceSelectionProps) {
   const { data, error, isFetching, refetch } = useRaces();
   const isLoading = isFetching && !data;

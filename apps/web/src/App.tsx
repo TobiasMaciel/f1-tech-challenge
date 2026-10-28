@@ -26,9 +26,16 @@ export function App() {
     setRuns({});
   }
 
+  // The error of a failed attempt no longer applies to the edited strategy. Only a settled error is
+  // cleared: resetting a pending mutation would drop its result.
+  function markStrategyChanged() {
+    setIsResultStale(true);
+    if (simulation.isError) simulation.reset();
+  }
+
   function selectDriver(driverId: string) {
     setSelectedDriverId(driverId);
-    setIsResultStale(true);
+    markStrategyChanged();
   }
 
   function simulate(request: SimulationRequest) {
@@ -68,7 +75,7 @@ export function App() {
               raceId={selectedRaceId}
               selectedDriverId={selectedDriverId}
               onSelectDriver={selectDriver}
-              onStintsChange={() => setIsResultStale(true)}
+              onStintsChange={markStrategyChanged}
               onSimulate={simulate}
               isSimulating={simulation.isPending}
               simulationError={simulation.error}
@@ -80,7 +87,7 @@ export function App() {
           <div className={SECTION_ENTER}>
             <SimulationResult
               raceId={selectedRaceId}
-              result={simulation.data}
+              result={runs.current?.result}
               previous={runs.previous}
               currentDriverId={runs.current?.request.driverId}
               isStale={isResultStale}

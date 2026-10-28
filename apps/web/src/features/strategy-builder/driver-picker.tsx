@@ -24,6 +24,7 @@ function groupByTeam(drivers: DriverWithTeam[]) {
   return [...groups];
 }
 
+/** Driver select grouped by team. */
 export function DriverPicker({ drivers, selectedDriverId, onSelectDriver }: DriverPickerProps) {
   // Lets the trigger show the driver's name instead of the raw id.
   const items = drivers.map((driver) => ({ value: driver.id, label: driver.name }));

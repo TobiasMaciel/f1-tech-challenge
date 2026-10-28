@@ -112,6 +112,15 @@ describe('buildConclusion', () => {
     );
   });
 
+  it('no habla de lluvia con una llovizna que la interfaz muestra como seco', () => {
+    const result = response({
+      laps: [lap(1, 0.03, { degradation: 2 })],
+      stints: [stint(1, 'SOFT', 0)],
+    });
+
+    expect(buildConclusion(result)).toBe('La mayor pérdida vino del desgaste: +2.0 s.');
+  });
+
   it('avisa cuando se usaron neumáticos de lluvia en seco', () => {
     const result = response({
       laps: [lap(1, 0, { tyrePace: 3.2 }, 'WET')],

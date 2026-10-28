@@ -19,6 +19,7 @@ interface CircuitBlockProps {
   tyreChangeTime: number;
 }
 
+/** Track outline and the circuit facts that feed the simulation. */
 export function CircuitBlock({ circuit, laps, pitStopLoss, tyreChangeTime }: CircuitBlockProps) {
   const facts = [
     { label: 'Tipo', value: CIRCUIT_TYPES[circuit.type] },

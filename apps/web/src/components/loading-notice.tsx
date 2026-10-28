@@ -7,5 +7,12 @@ export function LoadingNotice({ loading }: { loading: boolean }) {
   const isSlow = useAfterDelay(loading, SLOW_LOADING_DELAY_MS);
   if (!isSlow) return null;
 
-  return <p className="text-sm text-muted-foreground">Cargando datos…</p>;
+  return (
+    <div className="text-sm">
+      <p className="text-muted-foreground">Cargando datos…</p>
+      <p className="text-xs text-muted-foreground/80">
+        La primera carga puede tardar hasta un minuto mientras se activa la API externa.
+      </p>
+    </div>
+  );
 }

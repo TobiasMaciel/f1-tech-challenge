@@ -7,6 +7,7 @@ import { formatPercent, formatSignedSeconds } from '@/lib/format';
 
 const NUMBER_CELL = 'py-2 pl-4 text-right whitespace-nowrap';
 
+/** Table of the race compounds with their pace, degradation and rain band, from dry to wet. */
 export function TyresBlock({ tyres }: { tyres: TyreInfo[] }) {
   const orderedTyres = COMPOUNDS.flatMap(({ compound }) =>
     tyres.filter((tyre) => tyre.compound === compound),
@@ -17,7 +18,7 @@ export function TyresBlock({ tyres }: { tyres: TyreInfo[] }) {
       <h3 id="tyres-title" className="font-semibold">
         Neumáticos
       </h3>
-      <HorizontalScroll>
+      <HorizontalScroll label="Tabla de neumáticos">
         <table className="w-full text-sm whitespace-nowrap tabular-nums">
           <thead className="text-xs text-muted-foreground">
             <tr>

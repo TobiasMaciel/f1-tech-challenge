@@ -29,7 +29,7 @@ export function buildConclusion(result: SimulationResponse): string {
   }
 
   let text = `La mayor pérdida vino ${LOSS_SOURCES[biggest.key]}: ${formatSignedSeconds(biggest.seconds)}`;
-  if (result.laps.some((lap) => lap.rainIntensity > 0)) {
+  if (result.laps.some((lap) => isRaining(lap.rainIntensity))) {
     const worst = result.stints.reduce((max, stint) =>
       stint.weatherLoss > max.weatherLoss ? stint : max,
     );

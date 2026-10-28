@@ -5,6 +5,7 @@ interface ErrorAlertProps {
   onRetry: () => void;
 }
 
+/** Error message from the API with a button to try the request again. */
 export function ErrorAlert({ message, onRetry }: ErrorAlertProps) {
   return (
     <div

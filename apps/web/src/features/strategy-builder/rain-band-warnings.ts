@@ -2,8 +2,7 @@ import type { Compound, ForecastSegment, TyreInfo } from '@f1/shared';
 import { getCompoundInfo } from '@/lib/compounds';
 import { formatSignedSeconds } from '@/lib/format';
 import { isRaining } from '@/lib/rain';
-import { layoutStints } from './stint-layout';
-import type { StintRow } from './stints-form';
+import { layoutStints, type StintRow } from './stint-layout';
 
 export interface RainBandWarning {
   /** Stint position in the form, starting at 1. */
