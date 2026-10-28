@@ -1,0 +1,7 @@
+info:
+  name: API del proyecto
+  type: folder
+  seq: 1
+docs: |-
+  El backend (BFF) que consume el front. Combina los endpoints de la API F1 original y corre la simulación.
+  Contrato completo en `docs/api.md`.

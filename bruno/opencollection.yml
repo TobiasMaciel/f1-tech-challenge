@@ -1,0 +1,16 @@
+opencollection: 1.0.0
+
+info:
+  name: F1 Race Strategist
+bundled: false
+docs: |-
+  Requests para probar la API del proyecto y la API F1 original que consume.
+
+  Elegí el entorno **local** y levantá la app con `npm run dev`. Si cambiaste `PORT` en `.env`, actualizá `baseUrl` en el entorno.
+
+  La API original puede tardar hasta un minuto en responder la primera vez (cold start).
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

@@ -1,0 +1,6 @@
+info:
+  name: Errores
+  type: folder
+  seq: 6
+docs: |-
+  Un ejemplo por cada error de negocio. Todos responden `{ "error": { "code", "message", "details"? } }`.

@@ -1,0 +1,26 @@
+info:
+  name: Equipos
+  type: http
+  seq: 8
+
+http:
+  method: GET
+  url: "{{f1ApiUrl}}/api/teams"
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.teams
+      operator: isArray
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Equipos con el rendimiento del auto.

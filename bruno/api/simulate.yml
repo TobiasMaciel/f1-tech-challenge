@@ -1,0 +1,45 @@
+info:
+  name: Simular estrategia
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/simulations"
+  body:
+    type: json
+    data: |-
+      {
+        "raceId": "race-01",
+        "driverId": "driver-01",
+        "stints": [
+          { "compound": "SOFT", "laps": 20 },
+          { "compound": "HARD", "laps": 37 }
+        ]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.totalTime
+      operator: eq
+      value: "5289.239"
+    - expression: res.body.laps.length
+      operator: eq
+      value: "57"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Simula la carrera vuelta por vuelta con la estrategia de neumáticos. Devuelve `200` porque no crea ningún recurso.
+
+  Caso de referencia: Bahrain con Norris, SOFT 20 + HARD 37 → `5289.239` s.
+
+  API F1 original: carrera, clima, parámetros, neumáticos, pilotos y equipos (normalmente ya en la caché del backend).

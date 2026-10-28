@@ -1,0 +1,31 @@
+info:
+  name: Carrera inexistente
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/races/:raceId"
+  params:
+    - name: raceId
+      value: race-99
+      type: path
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+    - expression: res.body.error.code
+      operator: eq
+      value: "RACE_NOT_FOUND"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  La API F1 original responde 404 y el backend lo traduce a `RACE_NOT_FOUND`.

@@ -1,0 +1,35 @@
+info:
+  name: Estrategia inválida
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/simulations"
+  body:
+    type: json
+    data: |-
+      {
+        "raceId": "race-01",
+        "driverId": "driver-01",
+        "stints": [{ "compound": "HARD", "laps": 50 }]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.body.error.code
+      operator: eq
+      value: "INVALID_STRATEGY"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  El body es válido pero la estrategia no cumple las reglas de la carrera: las vueltas no suman `race.laps` y no hay paradas suficientes. `details` dice qué regla falló.

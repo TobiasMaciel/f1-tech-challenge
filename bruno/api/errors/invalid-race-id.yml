@@ -1,0 +1,31 @@
+info:
+  name: raceId con formato inválido
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/races/:raceId"
+  params:
+    - name: raceId
+      value: RACE_01
+      type: path
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.body.error.code
+      operator: eq
+      value: "VALIDATION_ERROR"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  `raceId` solo acepta `a-z`, `0-9` y `-`. Se rechaza antes de llamar a la API F1 original.

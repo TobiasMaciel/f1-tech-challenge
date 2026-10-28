@@ -1,0 +1,31 @@
+info:
+  name: Carrera
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{f1ApiUrl}}/api/races/:raceId"
+  params:
+    - name: raceId
+      value: race-01
+      type: path
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.id
+      operator: eq
+      value: "race-01"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Una carrera con su circuito embebido.

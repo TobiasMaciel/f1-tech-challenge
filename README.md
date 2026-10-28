@@ -36,6 +36,7 @@ La API externa se duerme por inactividad: la primera carga puede tardar hasta un
 - `apps/web`: SPA con React, Vite, TanStack Query, Tailwind y shadcn/ui.
 - `apps/api`: backend Express 5 que adapta la API F1 a lo que necesita cada pantalla.
 - `packages/shared`: esquemas Zod y tipos compartidos entre ambos.
+- `bruno`: colección de [Bruno](https://www.usebruno.com/) con un request por endpoint, los errores de negocio y la API F1 original.
 
 Contrato HTTP en [`docs/api.md`](docs/api.md) y decisiones de arquitectura en [`docs/adr/`](docs/adr/).
 

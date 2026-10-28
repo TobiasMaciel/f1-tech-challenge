@@ -1,0 +1,38 @@
+info:
+  name: Piloto inexistente
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/simulations"
+  body:
+    type: json
+    data: |-
+      {
+        "raceId": "race-01",
+        "driverId": "driver-99",
+        "stints": [
+          { "compound": "SOFT", "laps": 20 },
+          { "compound": "HARD", "laps": 37 }
+        ]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+    - expression: res.body.error.code
+      operator: eq
+      value: "DRIVER_NOT_FOUND"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  El `driverId` no existe en la API F1 original.

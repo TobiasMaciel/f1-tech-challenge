@@ -1,0 +1,26 @@
+info:
+  name: Carreras
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{f1ApiUrl}}/api/races"
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.races
+      operator: isArray
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Calendario. Cada carrera trae `circuitId`.

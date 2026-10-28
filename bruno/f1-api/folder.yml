@@ -1,0 +1,7 @@
+info:
+  name: API F1 original
+  type: folder
+  seq: 2
+docs: |-
+  La API externa que consume el backend. El front nunca la llama directamente.
+  Todas las respuestas vienen envueltas en `{ statusCode, code, message, data }`.

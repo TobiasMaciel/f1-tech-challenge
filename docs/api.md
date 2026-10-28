@@ -5,6 +5,8 @@ Backend for Frontend: cada endpoint devuelve lo que necesita una pantalla, combi
 - Las respuestas exitosas devuelven el recurso sin envoltorio.
 - Los tiempos se expresan en segundos (`number`, redondeados a 3 decimales); el formato visual lo decide el frontend.
 
+Para probarlos, abrí la carpeta [`bruno/`](../bruno/) en Bruno y elegí el entorno `local`. También corre desde la terminal: `cd bruno && npx @usebruno/cli run --env local -r`.
+
 ## Endpoints
 
 | Método | Ruta | Descripción |
